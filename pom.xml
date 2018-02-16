@@ -28,7 +28,7 @@
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
-              <mainClass>multi.robot.exploration.RobotExploration</mainClass>
+              <mainClass>multi.robot.exploration.Main</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -38,7 +38,7 @@
         <artifactId>exec-maven-plugin</artifactId>
         <version>1.6.0</version>
         <configuration>
-           <mainClass>multi.robot.exploration.RobotExploration</mainClass>
+           <mainClass>multi.robot.exploration.Main</mainClass>
         </configuration>
       </plugin>
     </plugins>
