@@ -27,13 +27,13 @@ public class RobotExploration
         robots = new Robot[numRobots];
         for (int r = 0; r < numRobots; ++r)
         {
-            robots[r] = new Robot(initLocations[r].x(), initLocations[r].y());
+            robots[r] = new Robot(initLocations[r]);
         }
 
         int numObstacles = obstacles.length;
         for (int obs = 0; obs < numObstacles; ++obs)
         {
-            grid.setCellState(obstacles[obs].x(), obstacles[obs].y(), State.OBSTACLE);
+            grid.setCellState(obstacles[obs], State.OBSTACLE);
         }
 
         // initialize the grid
@@ -45,8 +45,8 @@ public class RobotExploration
         for (int i = 0; i < numRobots; ++i)
         {
             // update frontier before movement
-            updateFrontier(robots[i].x(), robots[i].y());
-            grid.setCellState(robots[i].x(), robots[i].y(), State.OCCUPIED);
+            updateFrontier(robots[i].getPosition());
+            grid.setCellState(robots[i].getPosition(), State.OCCUPIED);
         }
 
         grid.printGrid();
@@ -84,22 +84,21 @@ public class RobotExploration
         Position cfg_c[] = new Position[numRobots];
         for (int i = 0; i < numRobots; ++i)
         {
-            cfg_c[i] = randomMovement(robots[i].x(), robots[i].y());
+            cfg_c[i] = randomMovement(robots[i].getPosition());
         }
 
         return cfg_c;
     }
 
     // generates a random movement for a swarmie (out of eight possible moves)
-    Position randomMovement(int x, int y)
+    Position randomMovement(Position currentPos)
     {
-        Position move = new Position(x, y, width, height);
+        Position move = new Position(currentPos, width, height);
 
         while (!validMovement(move))
         {
-            move = new Position(x, y, width, height);
+            move = new Position(currentPos, width, height);
         }
-        System.out.println("Move: " + move.x() + " " + move.y());
 
         return move;
     }
@@ -116,11 +115,11 @@ public class RobotExploration
     }
 
     // used to calculate utility
-    boolean validMovement(Position m)
+    boolean validMovement(Position move)
     {
         // only checks if they are moving to a currently occupied spot
         // doesn't prevent two robots from colliding into one spot
-        State s = grid.getCellState(m.x(), m.y());
+        State s = grid.getCellState(move);
         if (s != State.OBSTACLE && s != State.OCCUPIED)
         {
             return true;
@@ -135,21 +134,18 @@ public class RobotExploration
         int x, y;
         for (int i = 0; i < numRobots; ++i)
         {
-            x = robots[i].x();
-            y = robots[i].y();
+            grid.setCellState(robots[i].getPosition(), State.EXPLORED);
 
-            grid.setCellState(x, y, State.EXPLORED);
-
-            robots[i].setPosition(config[i].x(), config[i].y());
-            updateFrontier(config[i].x(), config[i].y());
-            grid.setCellState(config[i].x(), config[i].y(), State.OCCUPIED);
+            robots[i].setPosition(config[i]);
+            updateFrontier(config[i]);
+            grid.setCellState(config[i], State.OCCUPIED);
         }
     }
 
     // updates frontier after a configuration change
-    void updateFrontier(int x, int y)
+    void updateFrontier(Position pos)
     {
-        grid.checkAndSetFrontier(x, y);
+        grid.checkAndSetFrontier(pos);
     }
 
     boolean runInteration()
@@ -176,11 +172,6 @@ public class RobotExploration
        
         Position[] pos = generateCfg_c();
         executeCfg(pos);
-        /*grid.setCellState(robots[2].x(), robots[2].y(), State.EXPLORED);
-        Position move = randomMovement(robots[2].x(), robots[2].y());
-        robots[2].setPosition(move.x(), move.y());
-        updateFrontier(move.x(), move.y());
-        grid.setCellState(move.x(), move.y(), State.OCCUPIED);*/
 
         grid.printGrid();
 

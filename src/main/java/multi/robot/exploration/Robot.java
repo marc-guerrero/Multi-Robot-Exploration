@@ -2,27 +2,20 @@ package multi.robot.exploration;
 
 public class Robot
 {
-    private int x;
-    private int y;
+    private Position position;
 
-    Robot(int x, int y)
+    Robot(Position pos)
     {
-        setPosition(x, y);
+        setPosition(pos);
     }
 
-    public int x()
+    public void setPosition(Position pos)
     {
-        return this.x;
+        position = pos;
     }
 
-    public int y()
+    public Position getPosition()
     {
-        return this.y;
-    }
-
-    public void setPosition(int x, int y)
-    {
-        this.x = x;
-        this.y = y;
+        return position;
     }
 }

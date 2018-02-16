@@ -14,11 +14,11 @@ public class Position
         this.y = y;
     }
 
-    Position(int x, int y, int width, int height)
+    Position(Position prevPos, int width, int height)
     {
-        this.x = x;
-        this.y = y;
-        generateRandomPosition(width, height);
+        x = prevPos.x();
+        y = prevPos.y();
+        generateNewRandomPosition(width, height);
     }
 
     public int x()
@@ -37,7 +37,7 @@ public class Position
         this.y = y;
     }
 
-    private void generateRandomPosition(int width, int height)
+    private void generateNewRandomPosition(int width, int height)
     {
         int xmin, xmax;
         int ymin, ymax;

@@ -24,14 +24,14 @@ public class Grid
         }
     }
 
-    void setCellState(int x, int y, State state)
+    void setCellState(Position pos, State state)
     {
-        cell[x][y].setState(state);
+        cell[pos.x()][pos.y()].setState(state);
     }
 
-    State getCellState(int x, int y)
+    State getCellState(Position pos)
     {
-        return cell[x][y].getState();
+        return cell[pos.x()][pos.y()].getState();
     }
 
     void printGrid()
@@ -47,8 +47,11 @@ public class Grid
         System.out.println();
     }
 
-    void checkAndSetFrontier(int x, int y)
+    void checkAndSetFrontier(Position pos)
     {
+        int x = pos.x();
+        int y = pos.y();
+
         // TODO: Cleanup
         if(cell[x][y].getState() == State.UNEXPLORED || cell[x][y].getState() == State.FRONTIER)
         {
