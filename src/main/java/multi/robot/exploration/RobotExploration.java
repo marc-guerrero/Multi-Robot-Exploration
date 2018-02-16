@@ -20,7 +20,7 @@ public class RobotExploration
 
         // create grid for simulation
         grid = new Grid(height, width);
-        unexplored = (height * width) - numRobots;
+        unexplored = (height * width) - numRobots - obstacles.length;
 
         // set robots and obstacles
         // TODO: clean
@@ -122,15 +122,15 @@ public class RobotExploration
         // prevents robot collision into same spot
         for (int i = 0; i < cfgCount; ++i)
         {
-            if (cfg_c[i].equals(move) == true)
+            if (cfg_c[i].equals(move))
             {
                     return false;
             }
         }
 
-        // checks if position of random move is an obstacle
+        // checks if position of random move is an obstacle or occupied
         State s = grid.getCellState(move);
-        if (s != State.OBSTACLE)
+        if (s != State.OBSTACLE && s != State.OCCUPIED)
         {
             return true;
         }
@@ -146,6 +146,12 @@ public class RobotExploration
         {
             System.out.println("Move (" + config[i].x() + "," + config[i].y() + ")");
             grid.setCellState(robots[i].getPosition(), State.EXPLORED);
+
+            // keeps track of unexplored cells
+            if (grid.getCellState(config[i]) == State.FRONTIER)
+            {
+                --unexplored;
+            }
 
             robots[i].setPosition(config[i]);
             updateFrontier(config[i]);
@@ -184,8 +190,15 @@ public class RobotExploration
         Position[] pos = generateCfg_c();
         executeCfg(pos);
 
+        System.out.println("Unexplored: " + unexplored);
         grid.printGrid();
 
-        return false;
+        if (unexplored == 0)
+        {
+            System.out.println("Grid Explored!");
+            return false;
+        }
+
+        return true;
     }
 }
