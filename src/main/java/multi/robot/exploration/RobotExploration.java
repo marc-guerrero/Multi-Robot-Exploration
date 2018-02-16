@@ -1,13 +1,15 @@
+package multi.robot.exploration;
+
 import java.util.Random;
 
-public class SwarmieExplorationAlgo
+public class RobotExploration
 {
     private int height, width, numRobots, k, unexplored;
     private Grid grid;
     private Robot robots[];
     private Position frontier[];
 
-    SwarmieExplorationAlgo(int height, int width, int k, int numRobots, 
+    RobotExploration(int height, int width, int k, int numRobots, 
                            Position initLocations[], Position obstacles[])
     {
         // initialize values
@@ -97,6 +99,7 @@ public class SwarmieExplorationAlgo
         {
             move = new Position(x, y, width, height);
         }
+        System.out.println("Move: " + move.x() + " " + move.y());
 
         return move;
     }
@@ -115,6 +118,8 @@ public class SwarmieExplorationAlgo
     // used to calculate utility
     boolean validMovement(Position m)
     {
+        // only checks if they are moving to a currently occupied spot
+        // doesn't prevent two robots from colliding into one spot
         State s = grid.getCellState(m.x(), m.y());
         if (s != State.OBSTACLE && s != State.OCCUPIED)
         {
@@ -135,9 +140,9 @@ public class SwarmieExplorationAlgo
 
             grid.setCellState(x, y, State.EXPLORED);
 
-            updateFrontier(x, y);
-
             robots[i].setPosition(config[i].x(), config[i].y());
+            updateFrontier(config[i].x(), config[i].y());
+            grid.setCellState(config[i].x(), config[i].y(), State.OCCUPIED);
         }
     }
 
@@ -168,11 +173,14 @@ public class SwarmieExplorationAlgo
         // 5. re-draw grid
 
         // Testing random movement
-        grid.setCellState(robots[2].x(), robots[2].y(), State.EXPLORED);
+       
+        Position[] pos = generateCfg_c();
+        executeCfg(pos);
+        /*grid.setCellState(robots[2].x(), robots[2].y(), State.EXPLORED);
         Position move = randomMovement(robots[2].x(), robots[2].y());
         robots[2].setPosition(move.x(), move.y());
         updateFrontier(move.x(), move.y());
-        grid.setCellState(move.x(), move.y(), State.OCCUPIED);
+        grid.setCellState(move.x(), move.y(), State.OCCUPIED);*/
 
         grid.printGrid();
 
@@ -182,14 +190,14 @@ public class SwarmieExplorationAlgo
     public static void main(String[] args)
     {
         // TODO: Handle file input.
-        int t = 50;
+        int t = 100;
         Position initLoc[] = {new Position(0,9), new Position(1,9), new Position(2,9)};
         Position obstacles[] = {new Position(0,0), new Position(1,0), new Position(2,2),
                                 new Position(3,3), new Position(4,4), new Position(4,4),
                                 new Position(5,5), new Position(6,6), new Position(7,7),
                                 new Position(8,8), new Position(9,9)};
 
-        SwarmieExplorationAlgo algo = new SwarmieExplorationAlgo(10, 10, 10, 3, initLoc, obstacles);
+        RobotExploration algo = new RobotExploration(10, 10, 10, 3, initLoc, obstacles);
 
         // run algorithm for t (time) steps
         for (int i = 0; i < t; ++i)

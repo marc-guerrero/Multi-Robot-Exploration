@@ -1,3 +1,5 @@
+package multi.robot.exploration;
+
 public class Robot
 {
     private int x;

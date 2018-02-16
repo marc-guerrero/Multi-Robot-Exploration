@@ -1,3 +1,5 @@
+package multi.robot.exploration;
+
 enum State {OBSTACLE, UNEXPLORED, EXPLORED, FRONTIER, OCCUPIED;}
 
 public class Cell

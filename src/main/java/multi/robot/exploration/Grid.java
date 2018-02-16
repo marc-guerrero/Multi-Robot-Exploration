@@ -1,3 +1,5 @@
+package multi.robot.exploration;
+
 public class Grid
 {
     private int width;

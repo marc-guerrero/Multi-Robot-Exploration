@@ -1,3 +1,5 @@
+package multi.robot.exploration;
+
 import java.util.Random;
 import java.lang.Math;
 
