@@ -14,7 +14,7 @@ public class Position
         this.y = y;
     }
 
-    Position(Position prevPos, int width, int height)
+    Position(Position prevPos, int height, int width)
     {
         x = prevPos.x();
         y = prevPos.y();
@@ -31,23 +31,23 @@ public class Position
         return this.y;
     }
 
-    public void setPosition(int x, int y)
+    public void setPosition(Position pos)
     {
         this.x = x;
         this.y = y;
     }
 
-    private void generateNewRandomPosition(int width, int height)
+    private void generateNewRandomPosition(int height, int width)
     {
         int xmin, xmax;
         int ymin, ymax;
 
         // ensures that the random move is selected from within grid bounds
         xmin = Math.max(x-1, 0);
-        xmax = Math.min(x+1, width-1);
+        xmax = Math.min(x+1, height-1);
 
         ymin = Math.max(y-1, 0);
-        ymax = Math.min(y+1, height-1);
+        ymax = Math.min(y+1, width-1);
 
         // selects random move within [xmin, xmax] and [ymin, ymax] (inclusive)
         Random rand = new Random();

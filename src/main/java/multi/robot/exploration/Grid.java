@@ -2,8 +2,8 @@ package multi.robot.exploration;
 
 public class Grid
 {
-    private int width;
     private int height;
+    private int width;
     private Cell cell[][];
     private char cellVal[] = {'X', '-', '+', '%', 'O'};
 

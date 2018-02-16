@@ -14,14 +14,14 @@ public class Cell
         this.state = State.UNEXPLORED;
     }
 
-    State getState()
-    {
-        return this.state;
-    }
-
     void setState(State state)
     {
         this.state = state;
+    }
+
+    State getState()
+    {
+        return this.state;
     }
 
     void setFrontier()

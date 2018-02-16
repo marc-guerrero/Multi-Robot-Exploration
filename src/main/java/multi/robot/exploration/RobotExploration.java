@@ -93,11 +93,11 @@ public class RobotExploration
     // generates a random movement for a swarmie (out of eight possible moves)
     Position randomMovement(Position currentPos)
     {
-        Position move = new Position(currentPos, width, height);
+        Position move = new Position(currentPos, height, width);
 
         while (!validMovement(move))
         {
-            move = new Position(currentPos, width, height);
+            move = new Position(currentPos, height, width);
         }
 
         return move;
