@@ -55,6 +55,7 @@ public class Grid
         // TODO: Cleanup
         if(cell[x][y].getState() == State.UNEXPLORED || cell[x][y].getState() == State.FRONTIER)
         {
+            // Makes sure surrounding grid cells are not out of bounds
             int up = Math.max(x-1, 0);
             int down = Math.min(x+1, height-1);
             int left = Math.max(y-1, 0);

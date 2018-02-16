@@ -82,9 +82,18 @@ public class RobotExploration
     Position[] generateCfg_c()
     {
         Position cfg_c[] = new Position[numRobots];
+        Position move;
+
         for (int i = 0; i < numRobots; ++i)
         {
-            cfg_c[i] = randomMovement(robots[i].getPosition());
+            move = randomMovement(robots[i].getPosition());
+
+            while (!validMovement(move, cfg_c, i))
+            {
+                move = randomMovement(robots[i].getPosition());
+            }
+
+            cfg_c[i] = move;
         }
 
         return cfg_c;
@@ -93,14 +102,7 @@ public class RobotExploration
     // generates a random movement for a swarmie (out of eight possible moves)
     Position randomMovement(Position currentPos)
     {
-        Position move = new Position(currentPos, height, width);
-
-        while (!validMovement(move))
-        {
-            move = new Position(currentPos, height, width);
-        }
-
-        return move;
+        return new Position(currentPos, height, width);
     }
 
     // selects the configuration change with the best utility rating
@@ -115,12 +117,20 @@ public class RobotExploration
     }
 
     // used to calculate utility
-    boolean validMovement(Position move)
+    boolean validMovement(Position move, Position cfg_c[], int cfgCount)
     {
-        // only checks if they are moving to a currently occupied spot
-        // doesn't prevent two robots from colliding into one spot
+        // prevents robot collision into same spot
+        for (int i = 0; i < cfgCount; ++i)
+        {
+            if (cfg_c[i].equals(move) == true)
+            {
+                    return false;
+            }
+        }
+
+        // checks if position of random move is an obstacle
         State s = grid.getCellState(move);
-        if (s != State.OBSTACLE && s != State.OCCUPIED)
+        if (s != State.OBSTACLE)
         {
             return true;
         }
@@ -134,6 +144,7 @@ public class RobotExploration
         int x, y;
         for (int i = 0; i < numRobots; ++i)
         {
+            System.out.println("Move (" + config[i].x() + "," + config[i].y() + ")");
             grid.setCellState(robots[i].getPosition(), State.EXPLORED);
 
             robots[i].setPosition(config[i]);

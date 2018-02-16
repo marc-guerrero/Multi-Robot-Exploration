@@ -37,6 +37,16 @@ public class Position
         this.y = y;
     }
 
+    public boolean equals(Position pos)
+    {
+        if (x == pos.x() && y == pos.y())
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     private void generateNewRandomPosition(int height, int width)
     {
         int xmin, xmax;
