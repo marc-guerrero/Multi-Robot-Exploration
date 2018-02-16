@@ -1,13 +1,10 @@
 package multi.robot.exploration;
 
-import java.util.Random;
-
 public class RobotExploration
 {
     private int height, width, numRobots, k, unexplored;
     private Grid grid;
     private Robot robots[];
-    private Position frontier[];
 
     RobotExploration(int height, int width, int k, int numRobots, 
                            Position initLocations[], Position obstacles[])
@@ -42,13 +39,16 @@ public class RobotExploration
 
     void init()
     {
+        Position[] robotPos = new Position[numRobots];
         for (int i = 0; i < numRobots; ++i)
         {
-            // update frontier before movement
-            updateFrontier(robots[i].getPosition());
             grid.setCellState(robots[i].getPosition(), State.OCCUPIED);
+            robotPos[i] = robots[i].getPosition();
         }
 
+        updateFrontier(robotPos);
+        grid.printFrontier();
+        System.out.println("frontier: " + grid.getFrontierSize());
         grid.printGrid();
     }
 
@@ -153,16 +153,18 @@ public class RobotExploration
                 --unexplored;
             }
 
+            // sets robot position and updates cell state
             robots[i].setPosition(config[i]);
-            updateFrontier(config[i]);
             grid.setCellState(config[i], State.OCCUPIED);
         }
     }
 
-    // updates frontier after a configuration change
-    void updateFrontier(Position pos)
+    void updateFrontier(Position[] robots)
     {
-        grid.checkAndSetFrontier(pos);
+        for (int i = 0; i < robots.length; ++i)
+        {
+            grid.checkAndUpdateFrontier(robots[i]);
+        }
     }
 
     boolean runInteration()
@@ -189,7 +191,10 @@ public class RobotExploration
        
         Position[] pos = generateCfg_c();
         executeCfg(pos);
+        updateFrontier(pos);
 
+        grid.printFrontier();
+        System.out.println("Frontier: " + grid.getFrontierSize());
         System.out.println("Unexplored: " + unexplored);
         grid.printGrid();
 

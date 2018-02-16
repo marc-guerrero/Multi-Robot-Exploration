@@ -4,7 +4,8 @@ enum State {OBSTACLE, UNEXPLORED, EXPLORED, FRONTIER, OCCUPIED;}
 
 public class Cell
 {
-    private int x, y;
+    private int x;
+    private int y;
     private State state;
 
     public Cell(int x, int y)
@@ -21,15 +22,23 @@ public class Cell
 
     State getState()
     {
-        return this.state;
+        return state;
     }
 
-    void setFrontier()
+    boolean setFrontier()
     {
         // sets this cell as a frontier cell if it is currently unexplored
+        if (state == State.FRONTIER)
+        {
+            return true;
+        }
+
         if (state == State.UNEXPLORED)
         {
             state = State.FRONTIER;
+            return true;
         }
+
+        return false;
     }
 }

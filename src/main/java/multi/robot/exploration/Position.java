@@ -1,5 +1,6 @@
 package multi.robot.exploration;
 
+import java.util.Objects;
 import java.util.Random;
 import java.lang.Math;
 
@@ -23,28 +24,47 @@ public class Position
 
     public int x()
     {
-        return this.x;
+        return x;
     }
 
     public int y()
     {
-        return this.y;
+        return y;
     }
 
     public void setPosition(Position pos)
     {
-        this.x = x;
-        this.y = y;
+        x = pos.x();
+        y = pos.y();
     }
 
-    public boolean equals(Position pos)
+    @Override
+    public boolean equals(Object obj)
     {
+        if (obj == this)
+        {
+            return true;
+        }
+
+        if (!(obj instanceof Position))
+        {
+            return false;
+        }
+
+        Position pos = (Position)obj;
+
         if (x == pos.x() && y == pos.y())
         {
             return true;
         }
 
         return false;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(x, y);
     }
 
     private void generateNewRandomPosition(int height, int width)

@@ -1,11 +1,17 @@
 package multi.robot.exploration;
 
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.Iterator;
+
 public class Grid
 {
     private int height;
     private int width;
     private Cell cell[][];
     private char cellVal[] = {'X', '-', '+', '%', 'O'};
+    private HashMap<Position, Position> frontier = new HashMap<>();
 
     public Grid(int height, int width)
     {
@@ -47,29 +53,70 @@ public class Grid
         System.out.println();
     }
 
-    void checkAndSetFrontier(Position pos)
+
+    void checkAndUpdateFrontier(Position pos)
     {
         int x = pos.x();
         int y = pos.y();
 
         // TODO: Cleanup
-        if(cell[x][y].getState() == State.UNEXPLORED || cell[x][y].getState() == State.FRONTIER)
-        {
-            // Makes sure surrounding grid cells are not out of bounds
-            int up = Math.max(x-1, 0);
-            int down = Math.min(x+1, height-1);
-            int left = Math.max(y-1, 0);
-            int right = Math.min(y+1, width-1);
+        // Makes sure surrounding grid cells are not out of bounds
+        int up = Math.max(x-1, 0);
+        int down = Math.min(x+1, height-1);
+        int left = Math.max(y-1, 0);
+        int right = Math.min(y+1, width-1);
 
-            System.out.println("up, down, left, right: " + up + " " + down + " " + left + " " + right);
-            cell[up][y].setFrontier();        
-            cell[down][y].setFrontier();        
-            cell[x][left].setFrontier();        
-            cell[x][right].setFrontier();        
-            cell[up][left].setFrontier();
-            cell[up][right].setFrontier();
-            cell[down][left].setFrontier();
-            cell[down][right].setFrontier();
+        updateFrontier(x,y);
+        updateFrontier(up,y);
+        updateFrontier(down,y);
+        updateFrontier(x,left);
+        updateFrontier(x,right);
+        updateFrontier(up,left);
+        updateFrontier(up,right);
+        updateFrontier(down,left);
+        updateFrontier(down,right);
+    }
+
+    private void updateFrontier(int a, int b)
+    {
+        Position pos = new Position(a,b);
+        if (cell[a][b].setFrontier())
+        {
+            if (frontier.containsKey(pos))
+            {
+                return;
+            }
+
+            System.out.println("adding frontier " + a + " " + b);
+            frontier.put(pos,pos);
+        }
+        else
+        {
+            frontier.remove(pos);
         }
     }
+
+    Position getClosestFrontier(Position pos)
+    {
+        return null;
+    }
+
+    int getFrontierSize()
+    {
+        return frontier.size();
+    }
+
+    void printFrontier()
+    {
+        System.out.println("Printing Frontier Cells");
+        Set set = frontier.entrySet();
+        Iterator iterator = set.iterator();
+        while (iterator.hasNext())
+        {
+            Map.Entry mentry = (Map.Entry)iterator.next();
+            System.out.println("(" + ((Position)mentry.getValue()).x() + "," + ((Position)mentry.getValue()).y() + ")");
+
+        }
+    }
+
 }
