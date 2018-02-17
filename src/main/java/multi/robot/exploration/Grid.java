@@ -1,9 +1,25 @@
 package multi.robot.exploration;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.Iterator;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class Grid
 {
@@ -11,7 +27,9 @@ public class Grid
     private int width;
     private Cell cell[][];
     private char cellVal[] = {'X', '-', '+', '%', 'O'};
+    private Color cellColor[] = {Color.BLACK, Color.WHITE, Color.blue, Color.CYAN, Color.GREEN};
     private HashMap<Position, Position> frontier = new HashMap<>();
+    private JFrame frame;
 
     public Grid(int height, int width)
     {
@@ -28,6 +46,15 @@ public class Grid
                 cell[x][y] = new Cell(x, y);                
             }
         }
+
+        // Create Frame
+        frame = new JFrame("Multi Robot Exploration");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
+        frame.add(new GridPane(cell, cellColor));
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
 
     void setCellState(Position pos, State state)
@@ -51,8 +78,19 @@ public class Grid
             System.out.println();
         }
         System.out.println();
+
+        repaint();
     }
 
+    public void repaint()
+    {
+        try{
+            TimeUnit.MILLISECONDS.sleep(500);
+        }
+        catch(InterruptedException ex){}
+
+        frame.repaint();
+    }
 
     void checkAndUpdateFrontier(Position pos)
     {
@@ -119,4 +157,73 @@ public class Grid
         }
     }
 
+    public class GridPane extends JPanel {
+        private Cell cell[][];
+        private Color color[];
+        int columnCount, rowCount;
+        private Rectangle cells[][];
+        boolean refresh = true;
+
+        public GridPane(Cell cell[][], Color color[]) {
+            this.cell = cell;
+            this.color = color;
+            rowCount = cell.length;
+            columnCount = cell[0].length;
+            cells = new Rectangle[rowCount][columnCount];
+        }
+
+        @Override
+        public Dimension getPreferredSize() {
+            return new Dimension(500, 500);
+        }
+
+        @Override
+        public void invalidate() {
+            refresh = true;
+            super.invalidate();
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g.create();
+
+            int width = getWidth();
+            int height = getHeight();
+
+            int cellWidth = width / columnCount;
+            int cellHeight = height / rowCount;
+
+            int xOffset = (width - (columnCount * cellWidth)) / 2;
+            int yOffset = (height - (rowCount * cellHeight)) / 2;
+
+            if (refresh) {
+                for (int row = 0; row < rowCount; row++) {
+                    for (int col = 0; col < columnCount; col++) {
+                        Rectangle rect = new Rectangle(
+                                xOffset + (col * cellWidth),
+                                yOffset + (row * cellHeight),
+                                cellWidth,
+                                cellHeight);
+                        cells[row][col] = rect;
+                    }
+                }
+                refresh = false;
+            }
+
+            for (int i = 0; i < rowCount; ++i)
+            {
+                for (int j = 0; j < columnCount; ++j)
+                {
+                    g2d.setColor(color[cell[i][j].getState().ordinal()]);
+                    g2d.fill(cells[i][j]);
+                    g2d.setColor(Color.GRAY);
+                    g2d.draw(cells[i][j]);
+
+                }
+            }
+
+            g2d.dispose();
+        }
+    }
 }

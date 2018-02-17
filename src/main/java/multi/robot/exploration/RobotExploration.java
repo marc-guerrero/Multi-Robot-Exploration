@@ -200,7 +200,7 @@ public class RobotExploration
 
         if (unexplored == 0)
         {
-            System.out.println("Grid Explored!");
+            System.out.print("Grid Explored! ");
             return false;
         }
 

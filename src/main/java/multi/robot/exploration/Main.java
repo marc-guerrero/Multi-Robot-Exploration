@@ -5,7 +5,7 @@ public class Main
     public static void main(String[] args)
     {
         // TODO: Handle file input.
-        int t = 100;
+        int t = 1000;
         Position initLoc[] = {new Position(0,9), new Position(1,9), new Position(2,9)};
         Position obstacles[] = {new Position(0,0), new Position(1,0), new Position(2,2),
                                 new Position(3,3), new Position(4,4), new Position(5,5),
@@ -19,6 +19,7 @@ public class Main
         {
             if (!algo.runInteration())
             {
+                System.out.println(i + " iterations");
                 return;
             }
         }
