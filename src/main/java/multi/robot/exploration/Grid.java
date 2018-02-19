@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.Iterator;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class Grid
@@ -57,17 +56,17 @@ public class Grid
         frame.setVisible(true);
     }
 
-    void setCellState(Position pos, State state)
+    public void setCellState(Position pos, State state)
     {
         cell[pos.x()][pos.y()].setState(state);
     }
 
-    State getCellState(Position pos)
+    public State getCellState(Position pos)
     {
         return cell[pos.x()][pos.y()].getState();
     }
 
-    void printGrid()
+    public void printGrid()
     {
         for (int x = 0; x < height; ++x)
         {
@@ -92,7 +91,7 @@ public class Grid
         frame.repaint();
     }
 
-    void checkAndUpdateFrontier(Position pos)
+    public void checkAndUpdateFrontier(Position pos)
     {
         int x = pos.x();
         int y = pos.y();
@@ -134,17 +133,17 @@ public class Grid
         }
     }
 
-    Position getClosestFrontier(Position pos)
+    public Position getClosestFrontier(Position pos)
     {
         return null;
     }
 
-    int getFrontierSize()
+    public int getFrontierSize()
     {
         return frontier.size();
     }
 
-    void printFrontier()
+    public void printFrontier()
     {
         System.out.println("Printing Frontier Cells");
         Set set = frontier.entrySet();
@@ -157,7 +156,7 @@ public class Grid
         }
     }
 
-    public class GridPane extends JPanel {
+    private class GridPane extends JPanel {
         private Cell cell[][];
         private Color color[];
         int columnCount, rowCount;

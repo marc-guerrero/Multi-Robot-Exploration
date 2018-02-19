@@ -15,24 +15,24 @@ public class Cell
         this.state = State.UNEXPLORED;
     }
 
-    void setState(State state)
+    public void setState(State state)
     {
         this.state = state;
     }
 
-    State getState()
+    public State getState()
     {
         return state;
     }
 
-    boolean setFrontier()
+    public boolean setFrontier()
     {
-        // sets this cell as a frontier cell if it is currently unexplored
         if (state == State.FRONTIER)
         {
             return true;
         }
 
+        // sets this cell as a frontier cell if currently unexplored
         if (state == State.UNEXPLORED)
         {
             state = State.FRONTIER;

@@ -4,7 +4,7 @@ public class Robot
 {
     private Position position;
 
-    Robot(Position pos)
+    public Robot(Position pos)
     {
         setPosition(pos);
     }

@@ -6,8 +6,8 @@ public class RobotExploration
     private Grid grid;
     private Robot robots[];
 
-    RobotExploration(int height, int width, int k, int numRobots, 
-                           Position initLocations[], Position obstacles[])
+    public RobotExploration(int height, int width, int k, int numRobots, 
+                            Position initLocations[], Position obstacles[])
     {
         // initialize values
         this.height = height;
@@ -37,7 +37,7 @@ public class RobotExploration
         init();
     }
 
-    void init()
+    private void init()
     {
         Position[] robotPos = new Position[numRobots];
         for (int i = 0; i < numRobots; ++i)
@@ -53,7 +53,7 @@ public class RobotExploration
     }
 
     // generate a population of configuration changes.
-    Position[] generatePopulation()
+    private Position[] generatePopulation()
     {
         Position cfg[] = new Position[numRobots];
         cfg = generateCfg_c();
@@ -79,7 +79,7 @@ public class RobotExploration
     }
 
     // generates a configuration change for a group swarmies
-    Position[] generateCfg_c()
+    private Position[] generateCfg_c()
     {
         Position cfg_c[] = new Position[numRobots];
         Position move;
@@ -100,13 +100,13 @@ public class RobotExploration
     }
 
     // generates a random movement for a swarmie (out of eight possible moves)
-    Position randomMovement(Position currentPos)
+    private Position randomMovement(Position currentPos)
     {
         return new Position(currentPos, height, width);
     }
 
     // selects the configuration change with the best utility rating
-    int calcUtility(Position[] moves)
+    private int calcUtility(Position[] moves)
     {
         /* Utility:
          *          -3 if loss of comm (TODO: implement com)
@@ -117,7 +117,7 @@ public class RobotExploration
     }
 
     // used to calculate utility
-    boolean validMovement(Position move, Position cfg_c[], int cfgCount)
+    private boolean validMovement(Position move, Position cfg_c[], int cfgCount)
     {
         // prevents robot collision into same spot
         for (int i = 0; i < cfgCount; ++i)
@@ -139,7 +139,7 @@ public class RobotExploration
     }
 
     // updates the swarmies configuration (i.e. move the swarmies to their next location)
-    void executeCfg(Position[] config)
+    private void executeCfg(Position[] config)
     {
         int x, y;
         for (int i = 0; i < numRobots; ++i)
@@ -159,7 +159,7 @@ public class RobotExploration
         }
     }
 
-    void updateFrontier(Position[] robots)
+    private void updateFrontier(Position[] robots)
     {
         for (int i = 0; i < robots.length; ++i)
         {
@@ -167,7 +167,7 @@ public class RobotExploration
         }
     }
 
-    boolean runInteration()
+    public boolean runInteration()
     {
         /* check if we have explored entire area 
         if (unexplored < 1)
