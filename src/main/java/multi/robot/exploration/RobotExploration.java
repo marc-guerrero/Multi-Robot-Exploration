@@ -40,7 +40,7 @@ public class RobotExploration
     private void init()
     {
         Position[] robotPos = new Position[numRobots];
-        for (int i = 0; i < numRobots; ++i)
+       for (int i = 0; i < numRobots; ++i)
         {
             grid.setCellState(robots[i].getPosition(), State.OCCUPIED);
             robotPos[i] = robots[i].getPosition();
@@ -48,13 +48,14 @@ public class RobotExploration
 
         updateFrontier(robotPos);
         grid.printFrontier();
-        System.out.println("frontier: " + grid.getFrontierSize());
+        //System.out.println("frontier: " + grid.getFrontierSize());
         grid.printGrid();
     }
 
     // generate a population of configuration changes.
     private Position[] generatePopulation()
     {
+        //System.out.println("GENERATING");
         Position cfg[] = new Position[numRobots];
         cfg = generateCfg_c();
         int maxUtility = calcUtility(cfg);
@@ -110,10 +111,17 @@ public class RobotExploration
     {
         /* Utility:
          *          -3 if loss of comm (TODO: implement com)
+         *          -3 if not possible
          *          -md otherwise
          */
 
-        return 0;
+        int util = 0;
+        for (int i = 0; i < numRobots; ++i)
+        {
+            util -= grid.getClosestFrontier(moves[i]); 
+        }
+
+        return util;
     }
 
     // used to calculate utility
@@ -144,7 +152,7 @@ public class RobotExploration
         int x, y;
         for (int i = 0; i < numRobots; ++i)
         {
-            System.out.println("Move (" + config[i].x() + "," + config[i].y() + ")");
+            //System.out.println("Move (" + config[i].x() + "," + config[i].y() + ")");
             grid.setCellState(robots[i].getPosition(), State.EXPLORED);
 
             // keeps track of unexplored cells
@@ -189,18 +197,20 @@ public class RobotExploration
 
         // Testing random movement
        
-        Position[] pos = generateCfg_c();
+        Position[] pos = generatePopulation();
+        //System.out.println("MOVING");
         executeCfg(pos);
+
         updateFrontier(pos);
 
         grid.printFrontier();
-        System.out.println("Frontier: " + grid.getFrontierSize());
-        System.out.println("Unexplored: " + unexplored);
+        //System.out.println("Frontier: " + grid.getFrontierSize());
+        //System.out.println("Unexplored: " + unexplored);
         grid.printGrid();
 
         if (unexplored == 0)
         {
-            System.out.print("Grid Explored! ");
+            //System.out.print("Grid Explored! ");
             return false;
         }
 

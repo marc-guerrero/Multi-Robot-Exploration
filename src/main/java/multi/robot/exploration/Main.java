@@ -6,11 +6,11 @@ public class Main
     {
         // TODO: Handle file input.
         int t = 1000;
-        Position initLoc[] = {new Position(0,9), new Position(1,9), new Position(2,9)};
-        Position obstacles[] = {new Position(0,0), new Position(1,0), new Position(2,2),
-                                new Position(3,3), new Position(4,4), new Position(5,5),
-                                new Position(6,6), new Position(7,7), new Position(8,8),
-                                new Position(9,9)};
+        Position initLoc[] = {new Position(0,9), new Position(1,9), new Position(5,9)};
+        Position obstacles[] = {new Position(4,0), new Position(4,2),
+                                new Position(4,3), new Position(4,4), new Position(4,5),
+                                new Position(4,6), new Position(4,7), new Position(4,8),
+                                new Position(4,9)};
 
         RobotExploration algo = new RobotExploration(10, 10, 10, 3, initLoc, obstacles);
 

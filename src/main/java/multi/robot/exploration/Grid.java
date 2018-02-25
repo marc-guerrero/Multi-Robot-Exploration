@@ -2,12 +2,10 @@ package multi.robot.exploration;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.EventQueue;
+import java.awt.Dimension; import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
+import java.awt.Point; import java.awt.Rectangle;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -19,14 +17,17 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 public class Grid
 {
     private int height;
     private int width;
     private Cell cell[][];
+
     private char cellVal[] = {'X', '-', '+', '%', 'O'};
     private Color cellColor[] = {Color.BLACK, Color.WHITE, Color.blue, Color.CYAN, Color.GREEN};
+
     private HashMap<Position, Position> frontier = new HashMap<>();
     private JFrame frame;
 
@@ -66,9 +67,14 @@ public class Grid
         return cell[pos.x()][pos.y()].getState();
     }
 
+    public Cell getCell(Position pos)
+    {
+        return cell[pos.x()][pos.y()];
+    }
+
     public void printGrid()
     {
-        for (int x = 0; x < height; ++x)
+        /*for (int x = 0; x < height; ++x)
         {
             for (int y = 0; y < width; ++y)
             {
@@ -76,7 +82,7 @@ public class Grid
             }
             System.out.println();
         }
-        System.out.println();
+        System.out.println();*/
 
         repaint();
     }
@@ -124,7 +130,7 @@ public class Grid
                 return;
             }
 
-            System.out.println("adding frontier " + a + " " + b);
+            //System.out.println("adding frontier " + a + " " + b);
             frontier.put(pos,pos);
         }
         else
@@ -133,9 +139,62 @@ public class Grid
         }
     }
 
-    public Position getClosestFrontier(Position pos)
+    public int getClosestFrontier(Position pos)
     {
-        return null;
+        int closest = Integer.MAX_VALUE;
+
+        for (Position value : frontier.values())
+        {
+            int distance = distance(pos, value);
+
+            if (distance < closest)
+            {
+                closest = distance;
+            }
+        }
+
+        return closest;
+    }
+
+    public int distance(Position pos, Position front)
+    {
+        AStar<Grid> algo = new AStar<>();
+
+        int start[] = {pos.x(), pos.y()};
+        int end[] = {front.x(), front.y()};
+
+        List<Cell> path = algo.pathFromGrid(this.cell, start, end);
+
+        if (path == null)
+        {
+            System.out.println("null");
+            System.out.println("POS and FRONT: " + "(" + pos.x() + "," + pos.y() + ")(" + front.x() + "," + front.y() + ")" + "FAILED ");
+
+            return -3;
+        }
+
+        /*double posX = pos.x();
+        double posY = pos.y();
+        double frontX = front.x();
+        double frontY = front.y();
+
+        int distance = (int)Math.sqrt(Math.pow(posX - frontX, 2) + Math.pow(posY - frontY, 2));*/
+
+        /*if (path.size() - 1 !=  distance)
+        {
+            System.out.println("POS and FRONT: " + "(" + pos.x() + "," + pos.y() + ")(" + front.x() + "," + front.y() + ")" + "FAILED " + path.size() + " " + distance);
+
+            System.out.println("Path:");
+
+            for (Cell p : path)
+            {
+                System.out.println("(" + p.x() + "," + p.y() + ")");
+            }
+
+            System.exit(0);
+        }*/ 
+
+        return path.size();
     }
 
     public int getFrontierSize()
@@ -145,13 +204,13 @@ public class Grid
 
     public void printFrontier()
     {
-        System.out.println("Printing Frontier Cells");
+        //System.out.println("Printing Frontier Cells");
         Set set = frontier.entrySet();
         Iterator iterator = set.iterator();
         while (iterator.hasNext())
         {
             Map.Entry mentry = (Map.Entry)iterator.next();
-            System.out.println("(" + ((Position)mentry.getValue()).x() + "," + ((Position)mentry.getValue()).y() + ")");
+            //System.out.println("(" + ((Position)mentry.getValue()).x() + "," + ((Position)mentry.getValue()).y() + ")");
 
         }
     }

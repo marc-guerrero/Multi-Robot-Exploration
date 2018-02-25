@@ -25,6 +25,16 @@ public class Cell
         return state;
     }
 
+    public int x()
+    {
+        return x;
+    }
+
+    public int y()
+    {
+        return y;
+    }
+
     public boolean setFrontier()
     {
         if (state == State.FRONTIER)
@@ -40,5 +50,10 @@ public class Cell
         }
 
         return false;
+    }
+
+    public boolean isBlocked()
+    {
+        return (this.state == State.OBSTACLE);
     }
 }
